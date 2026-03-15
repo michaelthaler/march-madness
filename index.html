@@ -20,6 +20,7 @@
     <button class="tab-btn active" data-tab="setup">Tournament Setup</button>
     <button class="tab-btn" data-tab="participants">Participants</button>
     <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
+    <button class="tab-btn" data-tab="scoring">Scoring</button>
   </nav>
 
   <main>
@@ -59,6 +60,44 @@
       </div>
       <div id="leaderboard-container">
         <!-- app.js renders the leaderboard table here -->
+      </div>
+    </section>
+    <!-- Scoring Tab -->
+    <section id="tab-scoring" class="tab-content">
+      <div class="section-header">
+        <h2>How Scoring Works</h2>
+      </div>
+      <div class="scoring-explainer">
+        <div class="scoring-section">
+          <h3>Base Points</h3>
+          <p>You earn points for every correct pick. The further into the tournament, the more each correct pick is worth:</p>
+          <table class="scoring-table">
+            <thead>
+              <tr><th>Round</th><th>Points</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Round of 64</td><td>20</td></tr>
+              <tr><td>Round of 32</td><td>30</td></tr>
+              <tr><td>Sweet 16</td><td>50</td></tr>
+              <tr><td>Elite 8</td><td>90</td></tr>
+              <tr><td>Final Four</td><td>170</td></tr>
+              <tr><td>Championship</td><td>330</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="scoring-section">
+          <h3>Upset Bonus</h3>
+          <p>Correctly picking an upset earns you bonus points. An upset is when a higher-seeded team (the underdog) beats a lower-seeded team (the favorite). The bigger the upset, the bigger the bonus.</p>
+          <p>For every seed of difference between the winner and loser, you get an extra <strong>10%</strong> of the round's base points. So if you correctly pick a <strong>10 seed</strong> to beat a <strong>6 seed</strong> in the Sweet 16, that's a difference of 4 seeds:</p>
+          <div class="scoring-example">
+            <span class="example-calc">50 base + 50 &times; (10% &times; 4) = 50 + 20 = <strong>70 points</strong></span>
+          </div>
+          <p>A 12 seed beating a 1 seed in the Round of 32? That's an 11-seed difference:</p>
+          <div class="scoring-example">
+            <span class="example-calc">30 base + 30 &times; (10% &times; 11) = 30 + 33 = <strong>63 points</strong></span>
+          </div>
+          <p>There's no bonus for picking a favorite to win &mdash; only underdogs earn the extra points.</p>
+        </div>
       </div>
     </section>
   </main>
