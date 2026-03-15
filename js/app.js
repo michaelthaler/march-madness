@@ -14,6 +14,19 @@
       state = createAppState();
     }
 
+    // Backfill default team names if missing
+    DEFAULT_REGIONS.forEach(function(region) {
+      if (!state.tournament.teams[region]) state.tournament.teams[region] = {};
+      var defaults = DEFAULT_TEAMS[region];
+      if (defaults) {
+        for (var seed in defaults) {
+          if (!state.tournament.teams[region][seed]) {
+            state.tournament.teams[region][seed] = defaults[seed];
+          }
+        }
+      }
+    });
+
     initTheme();
     renderSetupBracket();
     renderParticipantsList();

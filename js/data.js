@@ -28,11 +28,41 @@ const FF_PAIRINGS = [
   { semi: 1, regions: ['West', 'Midwest'] }
 ];
 
+// 2026 NCAA Tournament teams by region and seed
+const DEFAULT_TEAMS = {
+  'East': {
+    1: 'Duke', 2: 'UConn', 3: 'Michigan St.', 4: 'Kansas',
+    5: "St. John's", 6: 'Louisville', 7: 'UCLA', 8: 'TCU',
+    9: 'Ohio St.', 10: 'UCF', 11: 'South Florida', 12: 'N. Iowa',
+    13: 'Cal Baptist', 14: 'N. Dakota St.', 15: 'Furman', 16: 'Siena'
+  },
+  'South': {
+    1: 'Florida', 2: 'Houston', 3: 'Illinois', 4: 'Nebraska',
+    5: 'Vanderbilt', 6: 'N. Carolina', 7: "Saint Mary's", 8: 'Clemson',
+    9: 'Iowa', 10: 'Texas A&M', 11: 'VCU', 12: 'McNeese',
+    13: 'Troy', 14: 'Penn', 15: 'Idaho', 16: 'PVAM/LEH'
+  },
+  'West': {
+    1: 'Arizona', 2: 'Purdue', 3: 'Gonzaga', 4: 'Arkansas',
+    5: 'Wisconsin', 6: 'BYU', 7: 'Miami', 8: 'Villanova',
+    9: 'Utah St.', 10: 'Missouri', 11: 'TEX/NCST', 12: 'High Point',
+    13: 'Hawaii', 14: 'Kennesaw St.', 15: 'Queens', 16: 'LIU'
+  },
+  'Midwest': {
+    1: 'Michigan', 2: 'Iowa St.', 3: 'Virginia', 4: 'Alabama',
+    5: 'Texas Tech', 6: 'Tennessee', 7: 'Kentucky', 8: 'Georgia',
+    9: 'Saint Louis', 10: 'Santa Clara', 11: 'M-OH/SMU', 12: 'Akron',
+    13: 'Hofstra', 14: 'Wright St.', 15: 'Tennessee St.', 16: 'UMBC/HOW'
+  }
+};
+
 function createTournament(year, regionNames) {
   year = year || 2026;
   regionNames = regionNames || DEFAULT_REGIONS.slice();
   const teams = {};
-  regionNames.forEach(r => { teams[r] = {}; });
+  regionNames.forEach(r => {
+    teams[r] = DEFAULT_TEAMS[r] ? Object.assign({}, DEFAULT_TEAMS[r]) : {};
+  });
   return {
     year: year,
     regions: regionNames,
