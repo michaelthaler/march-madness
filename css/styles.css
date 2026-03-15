@@ -34,10 +34,10 @@
   --bracket-line: #30363d;
   --bracket-line-active: #f97316;
 
-  --cell-w: 155px;
-  --cell-h: 26px;
-  --matchup-gap: 2px;
-  --round-gap: 28px;
+  --cell-w: 140px;
+  --cell-h: 24px;
+  --matchup-gap: 1px;
+  --round-gap: 20px;
 
   --font-display: 'Bebas Neue', 'Impact', sans-serif;
   --font-body: 'Barlow', 'Segoe UI', sans-serif;
@@ -264,7 +264,7 @@ textarea {
 .bracket-half {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
   flex-shrink: 0;
 }
 
@@ -281,10 +281,10 @@ textarea {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
+  padding: 0 12px;
   flex-shrink: 0;
-  min-width: 200px;
-  gap: 12px;
+  min-width: 180px;
+  gap: 10px;
 }
 
 /* ========== REGION ========== */
@@ -904,7 +904,8 @@ textarea {
   }
 
   :root {
-    --cell-w: 120px;
-    --cell-h: 24px;
+    --cell-w: 110px;
+    --cell-h: 22px;
+    --round-gap: 14px;
   }
 }

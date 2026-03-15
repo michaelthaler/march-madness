@@ -3,9 +3,10 @@
 
 function calculateUpsetBonus(basePoints, winnerSeed, loserSeed) {
   // Upset = higher seed number (lower-ranked) beats lower seed number (higher-ranked)
+  // Bonus = 10% per seed difference, applied to base points
   if (winnerSeed > loserSeed) {
     var diff = winnerSeed - loserSeed;
-    return Math.round(basePoints * 0.06 * diff);
+    return Math.round(basePoints * 0.10 * diff);
   }
   return 0;
 }

@@ -3,15 +3,15 @@
 
 const ROUNDS = [
   null, // index 0 unused
-  { number: 1, name: 'Round of 64', shortName: 'R64', basePoints: 10, gamesPerRegion: 8 },
-  { number: 2, name: 'Round of 32', shortName: 'R32', basePoints: 20, gamesPerRegion: 4 },
-  { number: 3, name: 'Sweet 16', shortName: 'S16', basePoints: 40, gamesPerRegion: 2 },
-  { number: 4, name: 'Elite 8', shortName: 'E8', basePoints: 80, gamesPerRegion: 1 },
-  { number: 5, name: 'Final Four', shortName: 'FF', basePoints: 160, gamesPerRegion: 0 },
-  { number: 6, name: 'Championship', shortName: 'Champ', basePoints: 320, gamesPerRegion: 0 }
+  { number: 1, name: 'Round of 64', shortName: 'R64', basePoints: 20, gamesPerRegion: 8 },
+  { number: 2, name: 'Round of 32', shortName: 'R32', basePoints: 30, gamesPerRegion: 4 },
+  { number: 3, name: 'Sweet 16', shortName: 'S16', basePoints: 50, gamesPerRegion: 2 },
+  { number: 4, name: 'Elite 8', shortName: 'E8', basePoints: 90, gamesPerRegion: 1 },
+  { number: 5, name: 'Final Four', shortName: 'FF', basePoints: 170, gamesPerRegion: 0 },
+  { number: 6, name: 'Championship', shortName: 'Champ', basePoints: 330, gamesPerRegion: 0 }
 ];
 
-const BASE_POINTS = [0, 10, 20, 40, 80, 160, 320];
+const BASE_POINTS = [0, 20, 30, 50, 90, 170, 330];
 
 // Standard NCAA bracket ordering within a region (R64 matchups)
 const R64_MATCHUPS = [
