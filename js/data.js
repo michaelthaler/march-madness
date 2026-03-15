@@ -19,13 +19,13 @@ const R64_MATCHUPS = [
   [6, 11], [3, 14], [7, 10], [2, 15]
 ];
 
-const DEFAULT_REGIONS = ['South', 'West', 'East', 'Midwest'];
+const DEFAULT_REGIONS = ['East', 'South', 'West', 'Midwest'];
 
 // Which regions pair up in the Final Four
 // Left-side regions feed semifinal 1, right-side feed semifinal 2
 const FF_PAIRINGS = [
-  { semi: 0, regions: ['South', 'West'] },
-  { semi: 1, regions: ['East', 'Midwest'] }
+  { semi: 0, regions: ['East', 'South'] },
+  { semi: 1, regions: ['West', 'Midwest'] }
 ];
 
 function createTournament(year, regionNames) {
