@@ -195,6 +195,12 @@ body {
   gap: 4px;
 }
 
+.btn-theme {
+  font-size: 1.1rem;
+  padding: 4px 10px;
+  line-height: 1;
+}
+
 /* ========== TABS ========== */
 .tab-bar {
   background: var(--bg-surface);

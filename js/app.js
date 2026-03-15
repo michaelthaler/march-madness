@@ -656,7 +656,8 @@
   function updateThemeButton() {
     var btn = document.getElementById('btn-theme-toggle');
     var isLight = document.documentElement.classList.contains('light');
-    btn.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+    btn.textContent = isLight ? '\u2600' : '\u263D';
+    btn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
   }
 
   // ======== BOOTSTRAP ========
