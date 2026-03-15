@@ -14,6 +14,7 @@
       state = createAppState();
     }
 
+    initTheme();
     renderSetupBracket();
     renderParticipantsList();
     renderLeaderboard();
@@ -601,6 +602,9 @@
       });
     });
 
+    // Theme toggle
+    document.getElementById('btn-theme-toggle').addEventListener('click', toggleTheme);
+
     // Header buttons
     document.getElementById('btn-export-json').addEventListener('click', handleExportJSON);
     document.getElementById('btn-import-json').addEventListener('click', handleImportJSON);
@@ -630,6 +634,29 @@
         else hideImportModal();
       }
     });
+  }
+
+  // ======== THEME ========
+
+  function initTheme() {
+    var saved = localStorage.getItem('mm-theme');
+    if (saved === 'light') {
+      document.documentElement.classList.add('light');
+    }
+    updateThemeButton();
+  }
+
+  function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+    var isLight = document.documentElement.classList.contains('light');
+    localStorage.setItem('mm-theme', isLight ? 'light' : 'dark');
+    updateThemeButton();
+  }
+
+  function updateThemeButton() {
+    var btn = document.getElementById('btn-theme-toggle');
+    var isLight = document.documentElement.classList.contains('light');
+    btn.textContent = isLight ? 'Light Mode' : 'Dark Mode';
   }
 
   // ======== BOOTSTRAP ========
