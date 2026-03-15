@@ -74,8 +74,8 @@ var BracketView = (function() {
         name2 = seed2 ? getTeamName(options.tournament, game._region2, seed2) : '';
       } else if (round === 6) {
         // Championship: find regions from FF
-        if (seed1) name1 = findChampTeamName(options.tournament, seed1, 0);
-        if (seed2) name2 = findChampTeamName(options.tournament, seed2, 1);
+        if (seed1) name1 = findChampTeamName(options.tournament, seed1, 0, options.resultsForLookup);
+        if (seed2) name2 = findChampTeamName(options.tournament, seed2, 1, options.resultsForLookup);
       }
     }
 
@@ -163,13 +163,30 @@ var BracketView = (function() {
     return matchup;
   }
 
-  function findChampTeamName(tournament, seed, semiIndex) {
-    var info = getFFTeamInfo(tournament, semiIndex, seed);
+  function findChampTeamName(tournament, seed, semiIndex, resultsOverride) {
+    var info = getFFTeamInfoFromResults(tournament, semiIndex, seed, resultsOverride);
     if (info.region) return getTeamName(tournament, info.region, seed);
     // Also check the other semi
-    var otherInfo = getFFTeamInfo(tournament, 1 - semiIndex, seed);
+    var otherInfo = getFFTeamInfoFromResults(tournament, 1 - semiIndex, seed, resultsOverride);
     if (otherInfo.region) return getTeamName(tournament, otherInfo.region, seed);
     return '';
+  }
+
+  // Like getFFTeamInfo but accepts an explicit results array (for picks/detail mode)
+  function getFFTeamInfoFromResults(tournament, semiIndex, seed, resultsOverride) {
+    if (resultsOverride) {
+      var pairing = FF_PAIRINGS[semiIndex];
+      if (!pairing) return { region: null, seed: seed };
+      for (var i = 0; i < pairing.regions.length; i++) {
+        var r = pairing.regions[i];
+        var e8 = getGamesForRound(4, r, resultsOverride);
+        if (e8[0] && e8[0].winner === seed) {
+          return { region: r, seed: seed };
+        }
+      }
+      return { region: null, seed: seed };
+    }
+    return getFFTeamInfo(tournament, semiIndex, seed);
   }
 
   function findScoreDetail(details, round, region, seed1, seed2) {
@@ -294,9 +311,15 @@ var BracketView = (function() {
     center.appendChild(champLabel);
 
     var champ = ffGames.championship;
+    // Determine which results to use for team name lookup
+    var lookupResults = results;
+    if ((options.mode === 'picks' || options.mode === 'detail') && options.picks) {
+      lookupResults = options.picks;
+    }
     var champOpts = Object.assign({}, options, {
       gameIndex: 0,
-      tournament: tournament
+      tournament: tournament,
+      resultsForLookup: lookupResults
     });
     var champEl = createMatchupEl(champ, champOpts);
     champEl.dataset.game = getGameId(6, null, 0);
