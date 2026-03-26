@@ -38,17 +38,46 @@ function scoreGame(pick, result) {
   return { correct: false, base: 0, bonus: 0, total: 0 };
 }
 
-// Match picks to results by game key
+// Match picks to results by bracket position
+// R1: exact seed matchups (always fixed). R2-R4: bracket slot within region.
+// R5-R6: matched by game index (order) since seeds vary by participant.
 function matchGames(picks, results) {
-  var resultMap = {};
+  var r1ResultMap = {};
+  var posResultMap = {};
+  var resultsByRound = {};
+
   results.forEach(function(r) {
-    resultMap[gameKey(r)] = r;
+    if (r.round === 1) {
+      r1ResultMap[gameKey(r)] = r;
+    } else if (r.round >= 2 && r.round <= 4) {
+      posResultMap[bracketPositionKey(r)] = r;
+    } else {
+      if (!resultsByRound[r.round]) resultsByRound[r.round] = [];
+      resultsByRound[r.round].push(r);
+    }
   });
 
   var pairs = [];
+  var picksByRound = {};
+
   picks.forEach(function(p) {
-    var key = gameKey(p);
-    pairs.push({ pick: p, result: resultMap[key] || null });
+    if (p.round === 1) {
+      pairs.push({ pick: p, result: r1ResultMap[gameKey(p)] || null });
+    } else if (p.round >= 2 && p.round <= 4) {
+      pairs.push({ pick: p, result: posResultMap[bracketPositionKey(p)] || null });
+    } else {
+      if (!picksByRound[p.round]) picksByRound[p.round] = [];
+      picksByRound[p.round].push(p);
+    }
+  });
+
+  // Match R5/R6 by position index
+  [5, 6].forEach(function(round) {
+    var rPicks = picksByRound[round] || [];
+    var rResults = resultsByRound[round] || [];
+    for (var i = 0; i < rPicks.length; i++) {
+      pairs.push({ pick: rPicks[i], result: rResults[i] || null });
+    }
   });
 
   return pairs;

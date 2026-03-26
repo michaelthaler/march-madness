@@ -309,11 +309,23 @@ function getGameId(round, region, gameIndex) {
   return 'R' + round + '-' + (region || 'FF') + '-' + gameIndex;
 }
 
-// Build game key for matching picks to results
+// Build game key for matching picks to results (used for R1 only)
 function gameKey(game) {
   var s1 = Math.min(game.seed1, game.seed2);
   var s2 = Math.max(game.seed1, game.seed2);
   return game.round + '-' + (game.region || 'FF') + '-' + s1 + '-' + s2;
+}
+
+// Maps each seed to its R1 bracket slot (0-7) for bracket position matching
+var SEED_TO_SLOT = {1:0, 16:0, 8:1, 9:1, 5:2, 12:2, 4:3, 13:3, 6:4, 11:4, 3:5, 14:5, 7:6, 10:6, 2:7, 15:7};
+
+// Returns a bracket-position key for R2-R4 games. Both seeds in a matchup
+// always map to the same position regardless of who won the previous round.
+function bracketPositionKey(game) {
+  var slot = SEED_TO_SLOT[game.seed1];
+  var divisor = Math.pow(2, game.round - 1);
+  var pos = Math.floor(slot / divisor);
+  return game.round + '-' + (game.region || 'FF') + '-' + pos;
 }
 
 // Find a game in an array by round, region, and game index within that round/region
