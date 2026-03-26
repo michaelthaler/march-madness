@@ -113,6 +113,11 @@ var BracketView = (function() {
           if (picked === seed2) team2.classList.add('incorrect-pick');
         } else {
           matchup.classList.add('unplayed-result');
+          // Show participant's prediction for unplayed games
+          if (detail.pick) {
+            if (detail.pick === seed1) team1.classList.add('predicted-pick');
+            if (detail.pick === seed2) team2.classList.add('predicted-pick');
+          }
         }
       }
     }

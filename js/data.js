@@ -323,6 +323,7 @@ var SEED_TO_SLOT = {1:0, 16:0, 8:1, 9:1, 5:2, 12:2, 4:3, 13:3, 6:4, 11:4, 3:5, 1
 // always map to the same position regardless of who won the previous round.
 function bracketPositionKey(game) {
   var slot = SEED_TO_SLOT[game.seed1];
+  if (slot === undefined) return game.round + '-' + (game.region || 'FF') + '-unknown';
   var divisor = Math.pow(2, game.round - 1);
   var pos = Math.floor(slot / divisor);
   return game.round + '-' + (game.region || 'FF') + '-' + pos;

@@ -448,6 +448,11 @@ textarea {
   background: var(--incorrect);
 }
 
+.team.predicted-pick {
+  font-weight: bold;
+  border-left: 3px solid var(--accent);
+}
+
 .team.empty {
   cursor: default;
   color: var(--text-muted);
