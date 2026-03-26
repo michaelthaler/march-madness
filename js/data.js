@@ -32,29 +32,241 @@ const FF_PAIRINGS = [
 const DEFAULT_TEAMS = {
   'East': {
     1: 'Duke', 2: 'UConn', 3: 'Michigan St.', 4: 'Kansas',
-    5: "St. John's", 6: 'Louisville', 7: 'UCLA', 8: 'TCU',
-    9: 'Ohio St.', 10: 'UCF', 11: 'South Florida', 12: 'N. Iowa',
+    5: "St. John's", 6: 'Louisville', 7: 'UCLA', 8: 'Ohio St.',
+    9: 'TCU', 10: 'UCF', 11: 'South Florida', 12: 'N. Iowa',
     13: 'Cal Baptist', 14: 'N. Dakota St.', 15: 'Furman', 16: 'Siena'
   },
   'South': {
     1: 'Florida', 2: 'Houston', 3: 'Illinois', 4: 'Nebraska',
     5: 'Vanderbilt', 6: 'N. Carolina', 7: "Saint Mary's", 8: 'Clemson',
     9: 'Iowa', 10: 'Texas A&M', 11: 'VCU', 12: 'McNeese',
-    13: 'Troy', 14: 'Penn', 15: 'Idaho', 16: 'PVAM/LEH'
+    13: 'Troy', 14: 'Penn', 15: 'Idaho', 16: 'Prairie View A&M'
   },
   'West': {
     1: 'Arizona', 2: 'Purdue', 3: 'Gonzaga', 4: 'Arkansas',
     5: 'Wisconsin', 6: 'BYU', 7: 'Miami', 8: 'Villanova',
-    9: 'Utah St.', 10: 'Missouri', 11: 'TEX/NCST', 12: 'High Point',
+    9: 'Utah St.', 10: 'Missouri', 11: 'Texas', 12: 'High Point',
     13: 'Hawaii', 14: 'Kennesaw St.', 15: 'Queens', 16: 'LIU'
   },
   'Midwest': {
     1: 'Michigan', 2: 'Iowa St.', 3: 'Virginia', 4: 'Alabama',
     5: 'Texas Tech', 6: 'Tennessee', 7: 'Kentucky', 8: 'Georgia',
-    9: 'Saint Louis', 10: 'Santa Clara', 11: 'M-OH/SMU', 12: 'Akron',
-    13: 'Hofstra', 14: 'Wright St.', 15: 'Tennessee St.', 16: 'UMBC/HOW'
+    9: 'Saint Louis', 10: 'Santa Clara', 11: 'Miami (OH)', 12: 'Akron',
+    13: 'Hofstra', 14: 'Wright St.', 15: 'Tennessee St.', 16: 'Howard'
   }
 };
+
+// 2026 NCAA Tournament actual results — Round of 64 and Round of 32
+// Format: [round, region, seed1, seed2, winner]
+var DEFAULT_RESULTS = [
+  // ===== ROUND OF 64 =====
+  // East Region
+  [1, 'East', 1, 16, 1],   // Duke def. Siena
+  [1, 'East', 8, 9, 9],    // TCU def. Ohio St. (upset)
+  [1, 'East', 5, 12, 5],   // St. John's def. N. Iowa
+  [1, 'East', 4, 13, 4],   // Kansas def. Cal Baptist
+  [1, 'East', 6, 11, 6],   // Louisville def. South Florida
+  [1, 'East', 3, 14, 3],   // Michigan St. def. N. Dakota St.
+  [1, 'East', 7, 10, 7],   // UCLA def. UCF
+  [1, 'East', 2, 15, 2],   // UConn def. Furman
+  // South Region
+  [1, 'South', 1, 16, 1],  // Florida def. Prairie View A&M
+  [1, 'South', 8, 9, 9],   // Iowa def. Clemson (upset)
+  [1, 'South', 5, 12, 5],  // Vanderbilt def. McNeese
+  [1, 'South', 4, 13, 4],  // Nebraska def. Troy
+  [1, 'South', 6, 11, 11], // VCU def. N. Carolina (upset)
+  [1, 'South', 3, 14, 3],  // Illinois def. Penn
+  [1, 'South', 7, 10, 10], // Texas A&M def. Saint Mary's (upset)
+  [1, 'South', 2, 15, 2],  // Houston def. Idaho
+  // West Region
+  [1, 'West', 1, 16, 1],   // Arizona def. LIU
+  [1, 'West', 8, 9, 9],    // Utah St. def. Villanova (upset)
+  [1, 'West', 5, 12, 12],  // High Point def. Wisconsin (upset)
+  [1, 'West', 4, 13, 4],   // Arkansas def. Hawaii
+  [1, 'West', 6, 11, 11],  // Texas def. BYU (upset)
+  [1, 'West', 3, 14, 3],   // Gonzaga def. Kennesaw St.
+  [1, 'West', 7, 10, 7],   // Miami def. Missouri
+  [1, 'West', 2, 15, 2],   // Purdue def. Queens
+  // Midwest Region
+  [1, 'Midwest', 1, 16, 1],  // Michigan def. Howard
+  [1, 'Midwest', 8, 9, 9],   // Saint Louis def. Georgia (upset)
+  [1, 'Midwest', 5, 12, 5],  // Texas Tech def. Akron
+  [1, 'Midwest', 4, 13, 4],  // Alabama def. Hofstra
+  [1, 'Midwest', 6, 11, 6],  // Tennessee def. Miami (OH)
+  [1, 'Midwest', 3, 14, 3],  // Virginia def. Wright St.
+  [1, 'Midwest', 7, 10, 7],  // Kentucky def. Santa Clara
+  [1, 'Midwest', 2, 15, 2],  // Iowa St. def. Tennessee St.
+  // ===== ROUND OF 32 =====
+  // East Region
+  [2, 'East', 1, 9, 1],    // Duke def. TCU
+  [2, 'East', 4, 5, 5],    // St. John's def. Kansas (upset)
+  [2, 'East', 3, 6, 3],    // Michigan St. def. Louisville
+  [2, 'East', 2, 7, 2],    // UConn def. UCLA
+  // South Region
+  [2, 'South', 1, 9, 9],   // Iowa def. Florida (upset!)
+  [2, 'South', 4, 5, 4],   // Nebraska def. Vanderbilt
+  [2, 'South', 3, 11, 3],  // Illinois def. VCU
+  [2, 'South', 2, 10, 2],  // Houston def. Texas A&M
+  // West Region
+  [2, 'West', 1, 9, 1],    // Arizona def. Utah St.
+  [2, 'West', 4, 12, 4],   // Arkansas def. High Point
+  [2, 'West', 3, 11, 11],  // Texas def. Gonzaga (upset)
+  [2, 'West', 2, 7, 2],    // Purdue def. Miami
+  // Midwest Region
+  [2, 'Midwest', 1, 9, 1], // Michigan def. Saint Louis
+  [2, 'Midwest', 4, 5, 4], // Alabama def. Texas Tech
+  [2, 'Midwest', 3, 6, 6], // Tennessee def. Virginia (upset)
+  [2, 'Midwest', 2, 7, 2]  // Iowa St. def. Kentucky
+];
+
+// 2026 ESPN Tournament Challenge bracket picks
+// Format per pick: [round, region, seed1, seed2, winner]
+var DEFAULT_PARTICIPANTS = [
+  { name: "Samtoo1", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,5],[1,'East',6,11,6],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,6],[1,'South',7,10,10],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,11],[1,'West',7,10,10],[1,'West',8,9,8],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,15],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,8],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,6,3],[2,'East',4,5,4],
+    [2,'South',1,9,1],[2,'South',2,10,2],[2,'South',3,6,3],[2,'South',4,5,4],
+    [2,'West',1,8,1],[2,'West',2,10,2],[2,'West',3,11,11],[2,'West',4,5,4],
+    [2,'Midwest',1,8,1],[2,'Midwest',3,6,6],[2,'Midwest',4,5,4],[2,'Midwest',7,15,7],
+    [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,1],[3,'South',2,3,2],
+    [3,'West',1,4,4],[3,'West',2,11,2],[3,'Midwest',1,4,4],[3,'Midwest',6,7,6],
+    [4,'East',1,2,2],[4,'South',1,2,2],[4,'West',2,4,2],[4,'Midwest',4,6,6],
+    [5,null,2,2,2],[5,null,2,6,2],[6,null,2,2,2]
+  ]},
+  { name: "mtoma33", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,5],[1,'East',6,11,6],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,6],[1,'South',7,10,10],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,6],[1,'West',7,10,7],[1,'West',8,9,9],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,8],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,6,3],[2,'East',4,5,5],
+    [2,'South',1,9,1],[2,'South',2,10,2],[2,'South',3,6,3],[2,'South',4,5,5],
+    [2,'West',1,9,1],[2,'West',2,7,2],[2,'West',3,6,3],[2,'West',4,5,4],
+    [2,'Midwest',1,8,1],[2,'Midwest',2,7,2],[2,'Midwest',3,6,3],[2,'Midwest',4,5,4],
+    [3,'East',1,5,1],[3,'East',2,3,2],[3,'South',1,5,1],[3,'South',2,3,2],
+    [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',2,3,2],
+    [4,'East',1,2,1],[4,'South',1,2,2],[4,'West',1,2,1],[4,'Midwest',1,2,2],
+    [5,null,1,2,2],[5,null,1,2,1],[6,null,1,2,1]
+  ]},
+  { name: "Claude", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,5],[1,'East',6,11,6],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,11],[1,'South',7,10,7],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,6],[1,'West',7,10,10],[1,'West',8,9,9],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,8],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,6,3],[2,'East',4,5,5],
+    [2,'South',1,9,1],[2,'South',2,7,2],[2,'South',3,11,3],[2,'South',4,5,5],
+    [2,'West',1,9,1],[2,'West',2,10,2],[2,'West',3,6,3],[2,'West',4,5,5],
+    [2,'Midwest',1,8,1],[2,'Midwest',2,7,2],[2,'Midwest',3,6,6],[2,'Midwest',4,5,4],
+    [3,'East',1,5,1],[3,'East',2,3,2],[3,'South',1,5,1],[3,'South',2,3,2],
+    [3,'West',1,5,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',2,6,2],
+    [4,'East',1,2,1],[4,'South',1,2,1],[4,'West',1,2,1],[4,'Midwest',1,2,1],
+    [5,null,1,1,1],[5,null,1,1,1],[6,null,1,1,1]
+  ]},
+  { name: "ESPNGenia", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,5],[1,'East',6,11,6],[1,'East',7,10,10],[1,'East',8,9,9],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,6],[1,'South',7,10,7],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,6],[1,'West',7,10,7],[1,'West',8,9,9],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,8],
+    [2,'East',1,9,1],[2,'East',2,10,2],[2,'East',3,6,6],[2,'East',4,5,5],
+    [2,'South',1,9,1],[2,'South',2,7,2],[2,'South',3,6,3],[2,'South',4,5,5],
+    [2,'West',1,9,1],[2,'West',2,7,2],[2,'West',3,6,3],[2,'West',4,5,4],
+    [2,'Midwest',1,8,1],[2,'Midwest',2,7,2],[2,'Midwest',3,6,6],[2,'Midwest',4,5,4],
+    [3,'East',1,5,1],[3,'East',2,6,2],[3,'South',1,5,1],[3,'South',2,3,2],
+    [3,'West',1,4,1],[3,'West',2,3,3],[3,'Midwest',1,4,1],[3,'Midwest',2,6,2],
+    [4,'East',1,2,1],[4,'South',1,2,2],[4,'West',1,3,3],[4,'Midwest',1,2,1],
+    [5,null,1,2,2],[5,null,1,3,1],[6,null,1,2,2]
+  ]},
+  { name: "Dancing with the Devils", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,5],[1,'East',6,11,11],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,11],[1,'South',7,10,7],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,11],[1,'West',7,10,10],[1,'West',8,9,9],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,12],[1,'Midwest',6,11,6],[1,'Midwest',7,10,10],[1,'Midwest',8,9,9],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,11,3],[2,'East',4,5,5],
+    [2,'South',1,9,1],[2,'South',2,7,2],[2,'South',3,11,3],[2,'South',4,5,5],
+    [2,'West',1,9,1],[2,'West',2,10,2],[2,'West',3,11,3],[2,'West',4,5,4],
+    [2,'Midwest',1,9,1],[2,'Midwest',2,10,2],[2,'Midwest',3,6,6],[2,'Midwest',4,12,12],
+    [3,'East',1,5,1],[3,'East',2,3,3],[3,'South',1,5,1],[3,'South',2,3,3],
+    [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,12,1],[3,'Midwest',2,6,2],
+    [4,'East',1,3,1],[4,'South',1,3,1],[4,'West',1,2,1],[4,'Midwest',1,2,2],
+    [5,null,1,1,1],[5,null,1,2,1],[6,null,1,1,1]
+  ]},
+  { name: "Gastelum", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,12],[1,'East',6,11,11],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,6],[1,'South',7,10,7],[1,'South',8,9,8],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,4],
+    [1,'West',5,12,5],[1,'West',6,11,11],[1,'West',7,10,7],[1,'West',8,9,9],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,8],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,11,3],[2,'East',4,12,4],
+    [2,'South',1,8,1],[2,'South',2,7,2],[2,'South',3,6,3],[2,'South',4,5,4],
+    [2,'West',1,9,1],[2,'West',2,7,2],[2,'West',3,11,3],[2,'West',4,5,4],
+    [2,'Midwest',1,8,1],[2,'Midwest',2,7,7],[2,'Midwest',3,6,6],[2,'Midwest',4,5,4],
+    [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,4],[3,'South',2,3,2],
+    [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',6,7,7],
+    [4,'East',1,2,1],[4,'South',2,4,4],[4,'West',1,2,1],[4,'Midwest',1,7,1],
+    [5,null,1,4,1],[5,null,1,1,1],[6,null,1,1,1]
+  ]},
+  { name: "Luck o' the foolish", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,12],[1,'East',6,11,6],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,4],
+    [1,'South',5,12,5],[1,'South',6,11,11],[1,'South',7,10,10],[1,'South',8,9,8],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,13],
+    [1,'West',5,12,5],[1,'West',6,11,6],[1,'West',7,10,10],[1,'West',8,9,8],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,6],[1,'Midwest',7,10,7],[1,'Midwest',8,9,9],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,6,3],[2,'East',4,12,4],
+    [2,'South',1,8,1],[2,'South',2,10,2],[2,'South',3,11,3],[2,'South',4,5,4],
+    [2,'West',1,8,8],[2,'West',2,10,2],[2,'West',3,6,3],[2,'West',5,13,5],
+    [2,'Midwest',1,9,1],[2,'Midwest',2,7,7],[2,'Midwest',3,6,3],[2,'Midwest',4,5,5],
+    [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,4],[3,'South',2,3,3],
+    [3,'West',2,3,2],[3,'West',5,8,5],[3,'Midwest',1,5,5],[3,'Midwest',3,7,7],
+    [4,'East',1,2,1],[4,'South',3,4,3],[4,'West',2,5,2],[4,'Midwest',5,7,7],
+    [5,null,1,3,1],[5,null,2,7,7],[6,null,1,7,7]
+  ]},
+  { name: "mattieft", picks: [
+    [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
+    [1,'East',5,12,12],[1,'East',6,11,6],[1,'East',7,10,7],[1,'East',8,9,8],
+    [1,'South',1,16,1],[1,'South',2,15,2],[1,'South',3,14,3],[1,'South',4,13,13],
+    [1,'South',5,12,5],[1,'South',6,11,11],[1,'South',7,10,10],[1,'South',8,9,9],
+    [1,'West',1,16,1],[1,'West',2,15,2],[1,'West',3,14,3],[1,'West',4,13,13],
+    [1,'West',5,12,5],[1,'West',6,11,6],[1,'West',7,10,10],[1,'West',8,9,8],
+    [1,'Midwest',1,16,1],[1,'Midwest',2,15,2],[1,'Midwest',3,14,3],[1,'Midwest',4,13,4],
+    [1,'Midwest',5,12,5],[1,'Midwest',6,11,11],[1,'Midwest',7,10,7],[1,'Midwest',8,9,9],
+    [2,'East',1,8,1],[2,'East',2,7,2],[2,'East',3,6,6],[2,'East',4,12,4],
+    [2,'South',1,9,1],[2,'South',2,10,10],[2,'South',3,11,3],[2,'South',5,13,5],
+    [2,'West',1,8,1],[2,'West',2,10,2],[2,'West',3,6,3],[2,'West',5,13,5],
+    [2,'Midwest',1,9,1],[2,'Midwest',2,7,7],[2,'Midwest',3,11,3],[2,'Midwest',4,5,5],
+    [3,'East',1,4,1],[3,'East',2,6,2],[3,'South',1,5,5],[3,'South',3,10,3],
+    [3,'West',1,5,1],[3,'West',2,3,3],[3,'Midwest',1,5,1],[3,'Midwest',3,7,3],
+    [4,'East',1,2,2],[4,'South',3,5,3],[4,'West',1,3,3],[4,'Midwest',1,3,1],
+    [5,null,1,3,1],[5,null,2,3,2],[6,null,1,2,1]
+  ]}
+];
 
 function createTournament(year, regionNames) {
   year = year || 2026;

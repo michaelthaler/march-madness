@@ -27,6 +27,25 @@
       }
     });
 
+    // Backfill default results if no results exist yet
+    if (state.tournament.results.length === 0 && DEFAULT_RESULTS && DEFAULT_RESULTS.length > 0) {
+      DEFAULT_RESULTS.forEach(function(r) {
+        state.tournament.results.push(createGame(r[0], r[1], r[2], r[3], r[4]));
+      });
+      saveState(state);
+    }
+
+    // Backfill default participants if none exist yet
+    if (state.participants.length === 0 && DEFAULT_PARTICIPANTS && DEFAULT_PARTICIPANTS.length > 0) {
+      DEFAULT_PARTICIPANTS.forEach(function(p) {
+        var picks = p.picks.map(function(pk) {
+          return createGame(pk[0], pk[1], pk[2], pk[3], pk[4]);
+        });
+        state.participants.push({ name: p.name, picks: picks });
+      });
+      saveState(state);
+    }
+
     initTheme();
     renderSetupBracket();
     renderParticipantsList();
