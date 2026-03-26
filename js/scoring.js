@@ -103,6 +103,7 @@ function calculateScore(picks, results, teams) {
     };
   }
 
+  var ffIndex = {};
   pairs.forEach(function(pair) {
     var pick = pair.pick;
     var result = pair.result;
@@ -112,10 +113,23 @@ function calculateScore(picks, results, teams) {
     var s1 = Math.min(pick.seed1, pick.seed2);
     var s2 = Math.max(pick.seed1, pick.seed2);
 
+    // Compute position key for bracket-view matching
+    var posKey;
+    if (round === 1) {
+      posKey = gameKey(pick);
+    } else if (round >= 2 && round <= 4) {
+      posKey = bracketPositionKey(pick);
+    } else {
+      // R5/R6: use round + index
+      if (!ffIndex[round]) ffIndex[round] = 0;
+      posKey = round + '-FF-' + ffIndex[round]++;
+    }
+
     details.push({
       round: round,
       region: pick.region,
       matchup: s1 + 'v' + s2,
+      positionKey: posKey,
       pick: pick.winner,
       actual: result ? result.winner : null,
       correct: sc.correct,

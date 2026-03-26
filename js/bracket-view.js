@@ -90,7 +90,7 @@ var BracketView = (function() {
 
     // Scoring overlay for detail mode
     if (options.mode === 'detail' && options.scoreDetails) {
-      var detail = findScoreDetail(options.scoreDetails, round, region, seed1, seed2);
+      var detail = findScoreDetail(options.scoreDetails, round, region, seed1, seed2, options.gameIndex);
       if (detail) {
         if (detail.correct === true) {
           matchup.classList.add('correct');
@@ -189,13 +189,29 @@ var BracketView = (function() {
     return getFFTeamInfo(tournament, semiIndex, seed);
   }
 
-  function findScoreDetail(details, round, region, seed1, seed2) {
-    var s1 = Math.min(seed1, seed2);
-    var s2 = Math.max(seed1, seed2);
-    for (var i = 0; i < details.length; i++) {
-      var d = details[i];
-      if (d.round === round && d.region === region && d.matchup === s1 + 'v' + s2) {
-        return d;
+  function findScoreDetail(details, round, region, seed1, seed2, gameIndex) {
+    if (round === 1) {
+      // R1: exact seed pair match
+      var s1 = Math.min(seed1, seed2);
+      var s2 = Math.max(seed1, seed2);
+      for (var i = 0; i < details.length; i++) {
+        var d = details[i];
+        if (d.round === round && d.region === region && d.matchup === s1 + 'v' + s2) {
+          return d;
+        }
+      }
+    } else if (round >= 2 && round <= 4) {
+      // R2-R4: match by bracket position
+      var game = { round: round, region: region, seed1: seed1, seed2: seed2 };
+      var posKey = bracketPositionKey(game);
+      for (var i = 0; i < details.length; i++) {
+        if (details[i].positionKey === posKey) return details[i];
+      }
+    } else {
+      // R5/R6: match by round + game index
+      var posKey = round + '-FF-' + (gameIndex || 0);
+      for (var i = 0; i < details.length; i++) {
+        if (details[i].positionKey === posKey) return details[i];
       }
     }
     return null;
