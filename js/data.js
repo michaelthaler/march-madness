@@ -116,7 +116,15 @@ var DEFAULT_RESULTS = [
   [2, 'Midwest', 1, 9, 1], // Michigan def. Saint Louis
   [2, 'Midwest', 4, 5, 4], // Alabama def. Texas Tech
   [2, 'Midwest', 3, 6, 6], // Tennessee def. Virginia (upset)
-  [2, 'Midwest', 2, 7, 2]  // Iowa St. def. Kentucky
+  [2, 'Midwest', 2, 7, 2],  // Iowa St. def. Kentucky
+
+  // Sweet 16
+  // South Region
+  [3, 'South', 4, 9, 9],   // Iowa def. Nebraska (upset)
+  [3, 'South', 2, 3, 3],   // Illinois def. Houston (upset)
+  // West Region
+  [3, 'West', 1, 4, 1],    // Arizona def. Arkansas
+  [3, 'West', 2, 11, 2]    // Purdue def. Texas
 ];
 
 // 2026 ESPN Tournament Challenge bracket picks
