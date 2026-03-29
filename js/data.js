@@ -282,7 +282,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,4,1],[3,'East',2,6,2],[3,'South',1,5,5],[3,'South',3,10,3],
     [3,'West',1,5,1],[3,'West',2,3,3],[3,'Midwest',1,5,1],[3,'Midwest',3,7,3],
     [4,'East',1,2,2],[4,'South',3,5,3],[4,'West',1,3,3],[4,'Midwest',1,3,1],
-    [5,null,1,3,1],[5,null,2,3,2],[6,null,1,2,1]
+    [5,null,2,3,2],[5,null,1,3,1],[6,null,1,2,1]
   ]}
 ];
 
