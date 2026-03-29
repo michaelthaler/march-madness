@@ -351,12 +351,10 @@ var BracketView = (function() {
       var champDisplay = el('div', 'champion-display');
       var champTitle = el('div', 'champion-title', 'Champion');
       var champName = el('div', 'champion-name');
-      // Find champion name
+      // Find champion name by tracing which semi the winner came from
       var champTeamName = '';
-      for (var ri = 0; ri < tournament.regions.length; ri++) {
-        var tn = getTeamName(tournament, tournament.regions[ri], champ.winner);
-        if (tn) { champTeamName = tn; break; }
-      }
+      var champSemiIndex = (champ.winner === ffGames.semis[0].winner) ? 0 : 1;
+      champTeamName = findChampTeamName(tournament, champ.winner, champSemiIndex, lookupResults);
       champName.textContent = champTeamName || ('Seed ' + champ.winner);
       champDisplay.appendChild(champTitle);
       champDisplay.appendChild(champName);
