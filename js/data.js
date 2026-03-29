@@ -399,6 +399,14 @@ function getGamesForRound(round, region, results) {
 function getFFGames(regions, results) {
   var games = { semis: [], championship: null };
 
+  // Collect R5 and R6 results by index order (not by seed lookup)
+  var r5Results = [];
+  var r6Results = [];
+  for (var i = 0; i < results.length; i++) {
+    if (results[i].round === 5 && results[i].region === null) r5Results.push(results[i]);
+    if (results[i].round === 6 && results[i].region === null) r6Results.push(results[i]);
+  }
+
   FF_PAIRINGS.forEach(function(pairing, idx) {
     var r1 = pairing.regions[0];
     var r2 = pairing.regions[1];
@@ -410,9 +418,10 @@ function getFFGames(regions, results) {
     var seed1 = w1 || 0;
     var seed2 = w2 || 0;
     var winner = null;
-    if (seed1 && seed2) {
-      var existing = findResultGame(results, 5, null, Math.min(seed1, seed2), Math.max(seed1, seed2));
-      if (existing) winner = existing.winner;
+    // Match by index: semi 0 = first R5 result, semi 1 = second R5 result
+    var semiResult = r5Results[idx];
+    if (seed1 && seed2 && semiResult) {
+      winner = semiResult.winner;
     }
     var semiGame = createGame(5, null, seed1, seed2, winner);
     // Store region info for display
@@ -425,9 +434,8 @@ function getFFGames(regions, results) {
   var w1 = games.semis[0].winner || 0;
   var w2 = games.semis[1].winner || 0;
   var champWinner = null;
-  if (w1 && w2) {
-    var existing = findResultGame(results, 6, null, Math.min(w1, w2), Math.max(w1, w2));
-    if (existing) champWinner = existing.winner;
+  if (w1 && w2 && r6Results[0]) {
+    champWinner = r6Results[0].winner;
   }
   games.championship = createGame(6, null, w1, w2, champWinner);
 
