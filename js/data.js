@@ -135,7 +135,7 @@ var DEFAULT_RESULTS = [
   // Elite 8
   [4, 'South', 3, 9, 3],   // Illinois def. Iowa
   [4, 'West', 1, 2, 1],    // Arizona def. Purdue
-  [4, 'East', 1, 2, 1],    // Duke def. UConn
+  [4, 'East', 1, 2, 2],    // UConn def. Duke (upset)
   [4, 'Midwest', 1, 6, 1]  // Michigan def. Tennessee
 ];
 
