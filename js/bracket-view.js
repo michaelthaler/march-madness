@@ -73,9 +73,17 @@ var BracketView = (function() {
         name1 = seed1 ? getTeamName(options.tournament, game._region1, seed1) : '';
         name2 = seed2 ? getTeamName(options.tournament, game._region2, seed2) : '';
       } else if (round === 6) {
-        // Championship: find regions from FF
-        if (seed1) name1 = findChampTeamName(options.tournament, seed1, 0, options.resultsForLookup);
-        if (seed2) name2 = findChampTeamName(options.tournament, seed2, 1, options.resultsForLookup);
+        // Championship: use propagated regions if available, else fall back to lookup
+        if (game._region1 && seed1) {
+          name1 = getTeamName(options.tournament, game._region1, seed1);
+        } else if (seed1) {
+          name1 = findChampTeamName(options.tournament, seed1, 0, options.resultsForLookup);
+        }
+        if (game._region2 && seed2) {
+          name2 = getTeamName(options.tournament, game._region2, seed2);
+        } else if (seed2) {
+          name2 = findChampTeamName(options.tournament, seed2, 1, options.resultsForLookup);
+        }
       }
     }
 
@@ -85,8 +93,16 @@ var BracketView = (function() {
     var team1 = createTeamEl(seed1, name1, teamOpts1);
     var team2 = createTeamEl(seed2, name2, teamOpts2);
 
-    if (winner === seed1 && seed1) team1.classList.add('winner');
-    if (winner === seed2 && seed2) team2.classList.add('winner');
+    if (winner && seed1 && seed2) {
+      if (seed1 === seed2 && game.winnerSide) {
+        // Same seeds (e.g. two 1-seeds in FF): use winnerSide to highlight correct team
+        if (game.winnerSide === 1) team1.classList.add('winner');
+        else team2.classList.add('winner');
+      } else {
+        if (winner === seed1) team1.classList.add('winner');
+        if (winner === seed2) team2.classList.add('winner');
+      }
+    }
 
     // Scoring overlay for detail mode
     if (options.mode === 'detail' && options.scoreDetails) {
@@ -127,12 +143,12 @@ var BracketView = (function() {
       if (seed1 && seed2) {
         team1.addEventListener('click', function() {
           if (options.onWinnerSelected) {
-            options.onWinnerSelected(round, region, options.gameIndex, seed1, game);
+            options.onWinnerSelected(round, region, options.gameIndex, seed1, game, 1);
           }
         });
         team2.addEventListener('click', function() {
           if (options.onWinnerSelected) {
-            options.onWinnerSelected(round, region, options.gameIndex, seed2, game);
+            options.onWinnerSelected(round, region, options.gameIndex, seed2, game, 2);
           }
         });
       }
@@ -142,13 +158,13 @@ var BracketView = (function() {
       team1.addEventListener('click', function(e) {
         if (e.target.tagName === 'INPUT') return; // don't select winner while editing name
         if (options.onWinnerSelected) {
-          options.onWinnerSelected(round, region, options.gameIndex, seed1, game);
+          options.onWinnerSelected(round, region, options.gameIndex, seed1, game, 1);
         }
       });
       team2.addEventListener('click', function(e) {
         if (e.target.tagName === 'INPUT') return;
         if (options.onWinnerSelected) {
-          options.onWinnerSelected(round, region, options.gameIndex, seed2, game);
+          options.onWinnerSelected(round, region, options.gameIndex, seed2, game, 2);
         }
       });
     }
@@ -353,8 +369,20 @@ var BracketView = (function() {
       var champName = el('div', 'champion-name');
       // Find champion name by tracing which semi the winner came from
       var champTeamName = '';
-      var champSemiIndex = (champ.winner === ffGames.semis[0].winner) ? 0 : 1;
-      champTeamName = findChampTeamName(tournament, champ.winner, champSemiIndex, lookupResults);
+      // Use winnerSide to determine which semi the champion came from
+      var champSemiIndex;
+      if (champ.winnerSide) {
+        champSemiIndex = champ.winnerSide === 1 ? 0 : 1;
+      } else {
+        champSemiIndex = (champ.winner === ffGames.semis[0].winner) ? 0 : 1;
+      }
+      // Use propagated region if available
+      var champRegion = champSemiIndex === 0 ? champ._region1 : champ._region2;
+      if (champRegion) {
+        champTeamName = getTeamName(tournament, champRegion, champ.winner);
+      } else {
+        champTeamName = findChampTeamName(tournament, champ.winner, champSemiIndex, lookupResults);
+      }
       champName.textContent = champTeamName || ('Seed ' + champ.winner);
       champDisplay.appendChild(champTitle);
       champDisplay.appendChild(champName);

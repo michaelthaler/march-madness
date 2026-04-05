@@ -55,14 +55,15 @@ function importJSON(jsonString) {
 }
 
 function exportCSV(games) {
-  var lines = ['round,region,seed1,seed2,winner'];
+  var lines = ['round,region,seed1,seed2,winner,winnerSide'];
   games.forEach(function(g) {
     lines.push([
       g.round,
       g.region || '',
       g.seed1,
       g.seed2,
-      g.winner || ''
+      g.winner || '',
+      g.winnerSide || ''
     ].join(','));
   });
   return lines.join('\n');
@@ -104,7 +105,9 @@ function importCSV(csvString) {
     }
     if (region === '') region = null;
 
-    games.push(createGame(round, region, seed1, seed2, winner));
+    var winnerSide = (parts.length >= 6 && parts[5]) ? parseInt(parts[5], 10) : null;
+    if (winnerSide !== null && isNaN(winnerSide)) winnerSide = null;
+    games.push(createGame(round, region, seed1, seed2, winner, winnerSide));
   }
 
   return games;

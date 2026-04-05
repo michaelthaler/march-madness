@@ -30,7 +30,7 @@
     // Backfill default results if no results exist yet
     if (state.tournament.results.length === 0 && DEFAULT_RESULTS && DEFAULT_RESULTS.length > 0) {
       DEFAULT_RESULTS.forEach(function(r) {
-        state.tournament.results.push(createGame(r[0], r[1], r[2], r[3], r[4]));
+        state.tournament.results.push(createGame(r[0], r[1], r[2], r[3], r[4], r[5]));
       });
       saveState(state);
     }
@@ -39,7 +39,7 @@
     if (state.participants.length === 0 && DEFAULT_PARTICIPANTS && DEFAULT_PARTICIPANTS.length > 0) {
       DEFAULT_PARTICIPANTS.forEach(function(p) {
         var picks = p.picks.map(function(pk) {
-          return createGame(pk[0], pk[1], pk[2], pk[3], pk[4]);
+          return createGame(pk[0], pk[1], pk[2], pk[3], pk[4], pk[5]);
         });
         state.participants.push({ name: p.name, picks: picks });
       });
@@ -285,9 +285,9 @@
     renderSetupBracket();
   }
 
-  function onResultWinnerSelected(round, region, gameIndex, winnerSeed, game) {
+  function onResultWinnerSelected(round, region, gameIndex, winnerSeed, game, winnerSide) {
     // Set the result
-    setResult(state.tournament.results, round, region, game.seed1, game.seed2, winnerSeed);
+    setResult(state.tournament.results, round, region, game.seed1, game.seed2, winnerSeed, winnerSide);
 
     // Cascade: clear downstream results that depended on the loser
     cascadeResults(state.tournament.results, round, region, game, winnerSeed, state.tournament);
@@ -446,8 +446,8 @@
       mode: 'picks',
       tournament: state.tournament,
       picks: p.picks,
-      onWinnerSelected: function(round, region, gameIndex, winnerSeed, game) {
-        onPickWinnerSelected(participantIdx, round, region, gameIndex, winnerSeed, game);
+      onWinnerSelected: function(round, region, gameIndex, winnerSeed, game, winnerSide) {
+        onPickWinnerSelected(participantIdx, round, region, gameIndex, winnerSeed, game, winnerSide);
       }
     });
   }
@@ -494,9 +494,9 @@
     renderLeaderboard();
   }
 
-  function onPickWinnerSelected(participantIdx, round, region, gameIndex, winnerSeed, game) {
+  function onPickWinnerSelected(participantIdx, round, region, gameIndex, winnerSeed, game, winnerSide) {
     var p = state.participants[participantIdx];
-    setResult(p.picks, round, region, game.seed1, game.seed2, winnerSeed);
+    setResult(p.picks, round, region, game.seed1, game.seed2, winnerSeed, winnerSide);
 
     // Cascade picks too
     cascadeResults(p.picks, round, region, game, winnerSeed, state.tournament);

@@ -25,6 +25,13 @@ function scoreGame(pick, result) {
   var base = BASE_POINTS[round] || 0;
 
   if (pick.winner === result.winner) {
+    // For FF/Championship (R5/R6), use winnerSide to ensure the correct team is matched,
+    // not just the same seed number from a different region
+    if (round >= 5 && result.winnerSide && pick.winnerSide) {
+      if (pick.winnerSide !== result.winnerSide) {
+        return { correct: false, base: 0, bonus: 0, total: 0 };
+      }
+    }
     var loserSeed = (result.winner === result.seed1) ? result.seed2 : result.seed1;
     var bonus = calculateUpsetBonus(base, result.winner, loserSeed);
     return {

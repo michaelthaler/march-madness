@@ -139,8 +139,9 @@ var DEFAULT_RESULTS = [
   [4, 'Midwest', 1, 6, 1], // Michigan def. Tennessee
 
   // Final Four
-  [5, null, 2, 3, 2],       // UConn def. Illinois
-  [5, null, 1, 1, 1]        // Michigan def. Arizona
+  // winnerSide: 1 = first region in pairing (East/West), 2 = second (South/Midwest)
+  [5, null, 2, 3, 2, 1],    // UConn(East) def. Illinois(South) — side 1
+  [5, null, 1, 1, 1, 2]     // Michigan(Midwest) def. Arizona(West) — side 2
 ];
 
 // 2026 ESPN Tournament Challenge bracket picks
@@ -162,7 +163,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,1],[3,'South',2,3,2],
     [3,'West',1,4,4],[3,'West',2,11,2],[3,'Midwest',1,4,4],[3,'Midwest',6,7,6],
     [4,'East',1,2,2],[4,'South',1,2,2],[4,'West',2,4,2],[4,'Midwest',4,6,6],
-    [5,null,2,2,2],[5,null,2,6,2],[6,null,2,2,2]
+    [5,null,2,2,2,2],[5,null,2,6,2,1],[6,null,2,2,2,1]
   ]},
   { name: "mtoma33", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -180,7 +181,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,5,1],[3,'East',2,3,2],[3,'South',1,5,1],[3,'South',2,3,2],
     [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',2,3,2],
     [4,'East',1,2,1],[4,'South',1,2,2],[4,'West',1,2,1],[4,'Midwest',1,2,2],
-    [5,null,1,2,2],[5,null,1,2,1],[6,null,1,2,1]
+    [5,null,1,2,2,2],[5,null,1,2,1,1],[6,null,1,2,1,2]
   ]},
   { name: "Claude", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -198,7 +199,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,5,1],[3,'East',2,3,2],[3,'South',1,5,1],[3,'South',2,3,2],
     [3,'West',1,5,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',2,6,2],
     [4,'East',1,2,1],[4,'South',1,2,1],[4,'West',1,2,1],[4,'Midwest',1,2,1],
-    [5,null,1,1,1],[5,null,1,1,1],[6,null,1,1,1]
+    [5,null,1,1,1,1],[5,null,1,1,1,1],[6,null,1,1,1,1]
   ]},
   { name: "ESPNGenia", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -216,7 +217,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,5,1],[3,'East',2,6,2],[3,'South',1,5,1],[3,'South',2,3,2],
     [3,'West',1,4,1],[3,'West',2,3,3],[3,'Midwest',1,4,1],[3,'Midwest',2,6,2],
     [4,'East',1,2,1],[4,'South',1,2,2],[4,'West',1,3,3],[4,'Midwest',1,2,1],
-    [5,null,1,2,2],[5,null,1,3,1],[6,null,1,2,2]
+    [5,null,1,2,2,2],[5,null,1,3,1,2],[6,null,1,2,2,1]
   ]},
   { name: "Dancing with the Devils", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -234,7 +235,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,5,1],[3,'East',2,3,3],[3,'South',1,5,1],[3,'South',2,3,3],
     [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,12,1],[3,'Midwest',2,6,2],
     [4,'East',1,3,1],[4,'South',1,3,1],[4,'West',1,2,1],[4,'Midwest',1,2,2],
-    [5,null,1,1,1],[5,null,1,2,1],[6,null,1,1,1]
+    [5,null,1,1,1,1],[5,null,1,2,1,1],[6,null,1,1,1,1]
   ]},
   { name: "Gastelum", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -252,7 +253,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,4],[3,'South',2,3,2],
     [3,'West',1,4,1],[3,'West',2,3,2],[3,'Midwest',1,4,1],[3,'Midwest',6,7,7],
     [4,'East',1,2,1],[4,'South',2,4,4],[4,'West',1,2,1],[4,'Midwest',1,7,1],
-    [5,null,1,4,1],[5,null,1,1,1],[6,null,1,1,1]
+    [5,null,1,4,1,1],[5,null,1,1,1,1],[6,null,1,1,1,1]
   ]},
   { name: "Luck o' the foolish", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -270,7 +271,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,4,1],[3,'East',2,3,2],[3,'South',1,4,4],[3,'South',2,3,3],
     [3,'West',2,3,2],[3,'West',5,8,5],[3,'Midwest',1,5,5],[3,'Midwest',3,7,7],
     [4,'East',1,2,1],[4,'South',3,4,3],[4,'West',2,5,2],[4,'Midwest',5,7,7],
-    [5,null,1,3,1],[5,null,2,7,7],[6,null,1,7,7]
+    [5,null,1,3,1,1],[5,null,2,7,7,2],[6,null,1,7,7,2]
   ]},
   { name: "mattieft", picks: [
     [1,'East',1,16,1],[1,'East',2,15,2],[1,'East',3,14,3],[1,'East',4,13,4],
@@ -288,7 +289,7 @@ var DEFAULT_PARTICIPANTS = [
     [3,'East',1,4,1],[3,'East',2,6,2],[3,'South',1,5,5],[3,'South',3,10,3],
     [3,'West',1,5,1],[3,'West',2,3,3],[3,'Midwest',1,5,1],[3,'Midwest',3,7,3],
     [4,'East',1,2,2],[4,'South',3,5,3],[4,'West',1,3,3],[4,'Midwest',1,3,1],
-    [5,null,2,3,2],[5,null,1,3,1],[6,null,1,2,1]
+    [5,null,2,3,2,1],[5,null,1,3,1,2],[6,null,1,2,1,2]
   ]}
 ];
 
@@ -311,14 +312,16 @@ function createParticipant(name) {
   return { name: name, picks: [] };
 }
 
-function createGame(round, region, seed1, seed2, winner) {
-  return {
+function createGame(round, region, seed1, seed2, winner, winnerSide) {
+  var g = {
     round: round,
     region: region || null,
     seed1: seed1,
     seed2: seed2,
     winner: winner || null
   };
+  if (winnerSide) g.winnerSide = winnerSide;
+  return g;
 }
 
 function createAppState() {
@@ -426,10 +429,12 @@ function getFFGames(regions, results) {
     var winner = null;
     // Match by index: semi 0 = first R5 result, semi 1 = second R5 result
     var semiResult = r5Results[idx];
+    var winnerSide = null;
     if (seed1 && seed2 && semiResult) {
       winner = semiResult.winner;
+      winnerSide = semiResult.winnerSide || null;
     }
-    var semiGame = createGame(5, null, seed1, seed2, winner);
+    var semiGame = createGame(5, null, seed1, seed2, winner, winnerSide);
     // Store region info for display
     semiGame._region1 = r1;
     semiGame._region2 = r2;
@@ -440,10 +445,22 @@ function getFFGames(regions, results) {
   var w1 = games.semis[0].winner || 0;
   var w2 = games.semis[1].winner || 0;
   var champWinner = null;
+  var champWinnerSide = null;
   if (w1 && w2 && r6Results[0]) {
     champWinner = r6Results[0].winner;
+    champWinnerSide = r6Results[0].winnerSide || null;
   }
-  games.championship = createGame(6, null, w1, w2, champWinner);
+  games.championship = createGame(6, null, w1, w2, champWinner, champWinnerSide);
+
+  // Propagate winner regions to championship for display
+  for (var s = 0; s < 2; s++) {
+    var semi = games.semis[s];
+    if (semi.winner && semi._region1 && semi._region2) {
+      var winRegion = (semi.winnerSide === 2) ? semi._region2 : semi._region1;
+      if (s === 0) games.championship._region1 = winRegion;
+      else games.championship._region2 = winRegion;
+    }
+  }
 
   return games;
 }
@@ -464,7 +481,7 @@ function findResultGame(results, round, region, s1, s2) {
 }
 
 // Set or update a result in the results array
-function setResult(results, round, region, seed1, seed2, winner) {
+function setResult(results, round, region, seed1, seed2, winner, winnerSide) {
   var lo = Math.min(seed1, seed2);
   var hi = Math.max(seed1, seed2);
   var existing = findResultGame(results, round, region, lo, hi);
@@ -472,8 +489,9 @@ function setResult(results, round, region, seed1, seed2, winner) {
     existing.winner = winner;
     existing.seed1 = seed1;
     existing.seed2 = seed2;
+    if (winnerSide) existing.winnerSide = winnerSide;
   } else {
-    results.push(createGame(round, region, seed1, seed2, winner));
+    results.push(createGame(round, region, seed1, seed2, winner, winnerSide));
   }
 }
 
