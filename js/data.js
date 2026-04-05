@@ -136,7 +136,11 @@ var DEFAULT_RESULTS = [
   [4, 'South', 3, 9, 3],   // Illinois def. Iowa
   [4, 'West', 1, 2, 1],    // Arizona def. Purdue
   [4, 'East', 1, 2, 2],    // UConn def. Duke (upset)
-  [4, 'Midwest', 1, 6, 1]  // Michigan def. Tennessee
+  [4, 'Midwest', 1, 6, 1], // Michigan def. Tennessee
+
+  // Final Four
+  [5, null, 2, 3, 2],       // UConn def. Illinois
+  [5, null, 1, 1, 1]        // Michigan def. Arizona
 ];
 
 // 2026 ESPN Tournament Challenge bracket picks
