@@ -25,11 +25,17 @@ function scoreGame(pick, result) {
   var base = BASE_POINTS[round] || 0;
 
   if (pick.winner === result.winner) {
-    // For FF/Championship (R5/R6), use winnerSide to ensure the correct team is matched,
-    // not just the same seed number from a different region
-    if (round >= 5 && result.winnerSide && pick.winnerSide) {
-      if (pick.winnerSide !== result.winnerSide) {
-        return { correct: false, base: 0, bonus: 0, total: 0 };
+    // For FF/Championship (R5/R6), compare winnerRegion (preferred) or winnerSide
+    // to ensure the correct team is matched, not just the same seed from a different region
+    if (round >= 5) {
+      if (result.winnerRegion && pick.winnerRegion) {
+        if (pick.winnerRegion !== result.winnerRegion) {
+          return { correct: false, base: 0, bonus: 0, total: 0 };
+        }
+      } else if (result.winnerSide && pick.winnerSide) {
+        if (pick.winnerSide !== result.winnerSide) {
+          return { correct: false, base: 0, bonus: 0, total: 0 };
+        }
       }
     }
     var loserSeed = (result.winner === result.seed1) ? result.seed2 : result.seed1;
